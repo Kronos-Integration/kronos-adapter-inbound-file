@@ -1,15 +1,32 @@
-
-
 image:https://img.shields.io/npm/v/stream-line-parser.svg[npm,link=https://www.npmjs.com/package/stream-line-parser]
 image:https://secure.travis-ci.org/darlenya/stream-line-parser.png[Build Status,link=http://travis-ci.org/darlenya/stream-line-parser]
 image:https://david-dm.org/darlenya/stream-line-parser.svg[Dependency Status,link=https://david-dm.org/darlenya/stream-line-parser]
 image:https://david-dm.org/darlenya/stream-line-parser/dev-status.svg[devDependency Status,link=https://david-dm.org/darlenya/stream-line-parser#info=devDependencies]
 
-
-
 == Adapter Inbound File
 This adapter open file streams and send them out as messages.
 It could listen on directories for new files or it could be externally triggered.
+
+=== Configuration
+The configuration for this step is as follows.
+
+.Message formats
+[source,js]
+----
+{
+  "regEx" : ".*\\.csv",      <1>
+  "filter": filterFunction,  <2>
+  "watchDir": directory      <3>
+  "onlyReadNewFiles" : true  <4>
+}
+----
+<1> (Optional)  A regular expression which will be matched against the file names changed. If the regEx did not
+match no message will be generated.
+<2> (Optional)  A custom function to filter the file names. The function looks like ''function (fileName){return true}''.
+The function gets the file name as parameter and must return true or false.
+<3> (Optional)  The directory which should be watched for changes.
+<4> (Optional)  If set to true (default) then only new files added will be send. Else it will also
+send the already existing files.
 
 === Endpoints
 This Adapter has two endpoints. One 'out' endpoint which send out the messages with
