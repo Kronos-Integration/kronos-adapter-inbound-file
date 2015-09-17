@@ -28,9 +28,18 @@ const inboundFileFactory = require('../lib/adapter-inbound-file');
  */
 function collect(options, messages) {
 
+	// Stores the error messages
+	// Currently the error messges will not be checked. 
+	let errors = [];
+
 	let inboundFile = inboundFileFactory(options);
 	let outEndPoint = inboundFile.getEndpoint('out');
 	let inEndPoint = inboundFile.getEndpoint('inFileTrigger');
+
+	inboundFile._logMessage = function (level, message, err, endpointName) {
+		errors.push(err);
+	};
+
 
 	// This generator emulates the IN endpoint of the next step.
 	// It will be connected with the OUT endpoint of the Adpater
