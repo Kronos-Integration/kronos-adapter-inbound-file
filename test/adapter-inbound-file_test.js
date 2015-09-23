@@ -29,10 +29,10 @@ const inboundFileFactory = require('../lib/adapter-inbound-file');
 function collect(options, messages) {
 
 	// Stores the error messages
-	// Currently the error messges will not be checked. 
+	// Currently the error messges will not be checked.
 	let errors = [];
 
-	let inboundFile = inboundFileFactory(options);
+	let inboundFile = inboundFileFactory({}, {}, options);
 	let outEndPoint = inboundFile.getEndpoint('out');
 	let inEndPoint = inboundFile.getEndpoint('inFileTrigger');
 
@@ -393,7 +393,7 @@ describe('adapter-inbound-file: file events', function () {
 describe('adapter-inbound-file: config', function () {
 
 	it('only name given', function (done) {
-		let inboundFile = inboundFileFactory({
+		let inboundFile = inboundFileFactory({}, {}, {
 			"name": "myfileInbound"
 		});
 
@@ -404,7 +404,7 @@ describe('adapter-inbound-file: config', function () {
 	});
 
 	it('regEx given', function (done) {
-		let inboundFile = inboundFileFactory({
+		let inboundFile = inboundFileFactory({}, {}, {
 			"name": "myfileInbound",
 			"regEx": '.*\\.csv'
 		});
@@ -417,7 +417,7 @@ describe('adapter-inbound-file: config', function () {
 
 	it('ERROR: Filter is not a function', function (done) {
 		let fn = function () {
-			inboundFileFactory({
+			inboundFileFactory({}, {}, {
 				"name": "myfileInbound",
 				"regEx": '.*\\.csv',
 				"filter": "a"
