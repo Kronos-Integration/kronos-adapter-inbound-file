@@ -23,7 +23,7 @@
     "debug": false
   },
   "devDependencies": {
-    "chai": "3.3.0",
+    "chai": "3.4.1",
     "istanbul-harmony": "0.3.16",
     "mocha": "2.3.3",
     "rimraf": "2.4.3",
