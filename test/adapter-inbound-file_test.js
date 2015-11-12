@@ -15,7 +15,16 @@ const rimraf = require('rimraf');
 const fixturesDir = path.join(__dirname, 'fixtures');
 const volatileDir = path.join(__dirname, 'fixtures', 'volatile');
 
-const inboundFileFactory = require('../lib/adapter-inbound-file');
+const kronosAdapterInboundFile = require('../index');
+const testStep = require('kronos-test-step');
+const step = require('kronos-step');
+
+// ---------------------------
+// Create a mock manager
+// ---------------------------
+const manager = testStep.managerMock;
+
+kronosAdapterInboundFile.registerWithManager(manager);
 
 /**
  * This function start the inboundFileAdapter
@@ -32,17 +41,23 @@ function collect(options, messages) {
 	// Currently the error messges will not be checked.
 	let errors = [];
 
-	let inboundFile = inboundFileFactory({}, {}, options);
-	let outEndPoint = inboundFile.getEndpoint('out');
-	let inEndPoint = inboundFile.getEndpoint('inFileTrigger');
+	let inboundFile = manager.getStepInstance(options);
+	let outEndPoint = inboundFile.endpoints.out;
+	let inEndPoint = inboundFile.endpoints.inFileTrigger;
 
-	inboundFile._logMessage = function (level, message, err, endpointName) {
-		errors.push(err);
+	inboundFile.error = function (logObject) {
+		errors.push(logObject.txt);
 	};
 
+	// This endpoint is the OUT endpoint of the previous step.
+	// It will be connected with the OUT endpoint of the Adpater
+	let sendEndpoint = step.createEndpoint("testEndpointOut", {
+		"out": true,
+		"active": true
+	});
 
 	// This generator emulates the IN endpoint of the next step.
-	// It will be connected with the OUT endpoint of the Adpater
+	// It will be connected with the OUT endpoint of the adapter
 	let generatorFunction = function* () {
 		while (true) {
 			const message = yield;
@@ -54,10 +69,12 @@ function collect(options, messages) {
 	outEndPoint.connectedEndpoint = generatorFunction;
 	outEndPoint.outActiveIterator = generatorFunction();
 	outEndPoint.outActiveIterator.next();
+	inEndPoint.connect(sendEndpoint);
 
-	inboundFile.start();
-
-	return inEndPoint;
+	return {
+		"ep": sendEndpoint,
+		"inboundFile": inboundFile
+	};
 }
 
 describe('adapter-inbound-file: external events', function () {
@@ -69,28 +86,33 @@ describe('adapter-inbound-file: external events', function () {
 		// Stores the messages comming from the step
 		let messages = [];
 
-		let triggerEndPoint = collect({
+		let obj = collect({
+			"type": "kronos-adapter-inbound-file",
 			"name": "myfileInbound",
 			"onlyReadNewFiles": true, // Seems not to work in the test here.
 			"watchDir": volatileDir
 		}, messages);
 
-		let iterator = triggerEndPoint.getInPassiveIterator()();
-		iterator.next();
+		let inboundFile = obj.inboundFile;
+		let sendEndpoint = obj.ep;
 
 		let message = {
 			"header": {},
 			"hops": [],
 			"payload": {}
 		};
-
 		message.payload = path.join(fixturesDir, 'existing_file.csv');
-		iterator.next(message);
 
-		setTimeout(function () {
-			assert.deepEqual(messages, ['existing_file.csv']);
-			done();
-		}, 100); // The time needed until the files where written my changs from environment to environment. Maybe it must be increased
+		inboundFile.start().then(function (step) {
+			sendEndpoint.send(message);
+			setTimeout(function () {
+				assert.deepEqual(messages, ['existing_file.csv']);
+				done();
+			}, 100); // The time needed until the files where written my changs from environment to environment. Maybe it must be increased
+		}, function (error) {
+			done(error); // 'uh oh: something bad happened’
+		});
+
 	});
 
 
@@ -101,28 +123,33 @@ describe('adapter-inbound-file: external events', function () {
 		// Stores the messages comming from the step
 		let messages = [];
 
-		let triggerEndPoint = collect({
+		let obj = collect({
+			"type": "kronos-adapter-inbound-file",
 			"name": "myfileInbound",
 			"onlyReadNewFiles": true, // Seems not to work in the test here.
 			"watchDir": volatileDir
 		}, messages);
 
-		let iterator = triggerEndPoint.getInPassiveIterator()();
-		iterator.next();
+		let inboundFile = obj.inboundFile;
+		let sendEndpoint = obj.ep;
 
 		let message = {
 			"header": {},
 			"hops": [],
 			"payload": {}
 		};
-
 		message.payload = path.join(fixturesDir, 'gumbo.csv');
-		iterator.next(message);
 
-		setTimeout(function () {
-			assert.deepEqual(messages, []);
-			done();
-		}, 100); // The time needed until the files where written my changs from environment to environment. Maybe it must be increased
+		inboundFile.start().then(function (step) {
+			sendEndpoint.send(message);
+			setTimeout(function () {
+				assert.deepEqual(messages, []);
+				done();
+			}, 100); // The time needed until the files where written my changs from environment to environment. Maybe it must be increased
+		}, function (error) {
+			done(error); // 'uh oh: something bad happened’
+		});
+
 	});
 
 	it('Payload as array, one file exists, one does NOT exist', function (done) {
@@ -132,28 +159,33 @@ describe('adapter-inbound-file: external events', function () {
 		// Stores the messages comming from the step
 		let messages = [];
 
-		let triggerEndPoint = collect({
+		let obj = collect({
+			"type": "kronos-adapter-inbound-file",
 			"name": "myfileInbound",
 			"onlyReadNewFiles": true, // Seems not to work in the test here.
 			"watchDir": volatileDir
 		}, messages);
 
-		let iterator = triggerEndPoint.getInPassiveIterator()();
-		iterator.next();
+		let inboundFile = obj.inboundFile;
+		let sendEndpoint = obj.ep;
 
 		let message = {
 			"header": {},
 			"hops": [],
 			"payload": {}
 		};
-
 		message.payload = [path.join(fixturesDir, 'gumbo.csv'), path.join(fixturesDir, 'existing_file.csv')];
-		iterator.next(message);
 
-		setTimeout(function () {
-			assert.deepEqual(messages, ['existing_file.csv']);
-			done();
-		}, 100); // The time needed until the files where written my changs from environment to environment. Maybe it must be increased
+		inboundFile.start().then(function (step) {
+			sendEndpoint.send(message);
+			setTimeout(function () {
+				assert.deepEqual(messages, ['existing_file.csv']);
+				done();
+			}, 100); // The time needed until the files where written my changs from environment to environment. Maybe it must be increased
+		}, function (error) {
+			done(error); // 'uh oh: something bad happened’
+		});
+
 	});
 
 	it('Payload as object, one file exists, one does NOT exist, files absolute', function (done) {
@@ -163,14 +195,15 @@ describe('adapter-inbound-file: external events', function () {
 		// Stores the messages comming from the step
 		let messages = [];
 
-		let triggerEndPoint = collect({
+		let obj = collect({
+			"type": "kronos-adapter-inbound-file",
 			"name": "myfileInbound",
 			"onlyReadNewFiles": true, // Seems not to work in the test here.
 			"watchDir": volatileDir
 		}, messages);
 
-		let iterator = triggerEndPoint.getInPassiveIterator()();
-		iterator.next();
+		let inboundFile = obj.inboundFile;
+		let sendEndpoint = obj.ep;
 
 		let message = {
 			"header": {},
@@ -181,12 +214,15 @@ describe('adapter-inbound-file: external events', function () {
 			}
 		};
 
-		iterator.next(message);
-
-		setTimeout(function () {
-			assert.deepEqual(messages, ['existing_file.csv']);
-			done();
-		}, 100); // The time needed until the files where written my changs from environment to environment. Maybe it must be increased
+		inboundFile.start().then(function (step) {
+			sendEndpoint.send(message);
+			setTimeout(function () {
+				assert.deepEqual(messages, ['existing_file.csv']);
+				done();
+			}, 100); // The time needed until the files where written my changs from environment to environment. Maybe it must be increased
+		}, function (error) {
+			done(error); // 'uh oh: something bad happened’
+		});
 	});
 
 	it('Payload as object, one file exists, one does NOT exist, files relative', function (done) {
@@ -196,14 +232,15 @@ describe('adapter-inbound-file: external events', function () {
 		// Stores the messages comming from the step
 		let messages = [];
 
-		let triggerEndPoint = collect({
+		let obj = collect({
+			"type": "kronos-adapter-inbound-file",
 			"name": "myfileInbound",
 			"onlyReadNewFiles": true, // Seems not to work in the test here.
 			"watchDir": volatileDir
 		}, messages);
 
-		let iterator = triggerEndPoint.getInPassiveIterator()();
-		iterator.next();
+		let inboundFile = obj.inboundFile;
+		let sendEndpoint = obj.ep;
 
 		let message = {
 			"header": {},
@@ -214,12 +251,15 @@ describe('adapter-inbound-file: external events', function () {
 			}
 		};
 
-		iterator.next(message);
-
-		setTimeout(function () {
-			assert.deepEqual(messages, ['existing_file.csv']);
-			done();
-		}, 100); // The time needed until the files where written my changs from environment to environment. Maybe it must be increased
+		inboundFile.start().then(function (step) {
+			sendEndpoint.send(message);
+			setTimeout(function () {
+				assert.deepEqual(messages, ['existing_file.csv']);
+				done();
+			}, 100); // The time needed until the files where written my changs from environment to environment. Maybe it must be increased
+		}, function (error) {
+			done(error); // 'uh oh: something bad happened’
+		});
 	});
 
 	it('Payload as object, relative file without directory', function (done) {
@@ -229,14 +269,15 @@ describe('adapter-inbound-file: external events', function () {
 		// Stores the messages comming from the step
 		let messages = [];
 
-		let triggerEndPoint = collect({
+		let obj = collect({
+			"type": "kronos-adapter-inbound-file",
 			"name": "myfileInbound",
 			"onlyReadNewFiles": true, // Seems not to work in the test here.
 			"watchDir": volatileDir
 		}, messages);
 
-		let iterator = triggerEndPoint.getInPassiveIterator()();
-		iterator.next();
+		let inboundFile = obj.inboundFile;
+		let sendEndpoint = obj.ep;
 
 		let message = {
 			"header": {},
@@ -246,12 +287,15 @@ describe('adapter-inbound-file: external events', function () {
 			}
 		};
 
-		iterator.next(message);
-
-		setTimeout(function () {
-			assert.deepEqual(messages, []);
-			done();
-		}, 100); // The time needed until the files where written my changs from environment to environment. Maybe it must be increased
+		inboundFile.start().then(function (step) {
+			sendEndpoint.send(message);
+			setTimeout(function () {
+				assert.deepEqual(messages, []);
+				done();
+			}, 100); // The time needed until the files where written my changs from environment to environment. Maybe it must be increased
+		}, function (error) {
+			done(error); // 'uh oh: something bad happened’
+		});
 	});
 	it('No payload in the message', function (done) {
 		// Set the timeout for this test
@@ -260,26 +304,30 @@ describe('adapter-inbound-file: external events', function () {
 		// Stores the messages comming from the step
 		let messages = [];
 
-		let triggerEndPoint = collect({
+		let obj = collect({
+			"type": "kronos-adapter-inbound-file",
 			"name": "myfileInbound",
 			"onlyReadNewFiles": true, // Seems not to work in the test here.
 			"watchDir": volatileDir
 		}, messages);
 
-		let iterator = triggerEndPoint.getInPassiveIterator()();
-		iterator.next();
+		let inboundFile = obj.inboundFile;
+		let sendEndpoint = obj.ep;
 
 		let message = {
 			"header": {},
 			"hops": []
 		};
 
-		iterator.next(message);
-
-		setTimeout(function () {
-			assert.deepEqual(messages, []);
-			done();
-		}, 100); // The time needed until the files where written my changs from environment to environment. Maybe it must be increased
+		inboundFile.start().then(function (step) {
+			sendEndpoint.send(message);
+			setTimeout(function () {
+				assert.deepEqual(messages, []);
+				done();
+			}, 100); // The time needed until the files where written my changs from environment to environment. Maybe it must be increased
+		}, function (error) {
+			done(error); // 'uh oh: something bad happened’
+		});
 	});
 
 });
@@ -306,24 +354,32 @@ describe('adapter-inbound-file: file events', function () {
 		// Stores the messages comming from the step
 		let messages = [];
 
-		collect({
+		const obj = collect({
+			"type": "kronos-adapter-inbound-file",
 			"name": "myfileInbound",
 			"onlyReadNewFiles": false, // Seems not to work in the test here.
 			"watchDir": volatileDir
 		}, messages);
 
-		// Wait 500 ms before creating the files
-		//	setTimeout(function () {}, 100);
+		let inboundFile = obj.inboundFile;
 
-		fs.createReadStream(path.join(fixturesDir, 'existing_file.csv')).pipe(fs.createWriteStream(path.join(volatileDir,
-			'existing_file_1.csv')));
-		fs.createReadStream(path.join(fixturesDir, 'existing_file.csv')).pipe(fs.createWriteStream(path.join(volatileDir,
-			'gum_file_2.csv')));
+		inboundFile.start().then(function (step) {
 
-		setTimeout(function () {
-			assert.deepEqual(messages, ['existing_file_1.csv', 'gum_file_2.csv']);
-			done();
-		}, 100); // The time needed until the files where written my changs from environment to environment. Maybe it must be increased
+			fs.createReadStream(path.join(fixturesDir, 'existing_file.csv')).pipe(fs.createWriteStream(path.join(
+				volatileDir,
+				'existing_file_1.csv')));
+			fs.createReadStream(path.join(fixturesDir, 'existing_file.csv')).pipe(fs.createWriteStream(path.join(
+				volatileDir,
+				'gum_file_2.csv')));
+
+			setTimeout(function () {
+				assert.deepEqual(messages, ['existing_file_1.csv', 'gum_file_2.csv']);
+				done();
+			}, 100); // The time needed until the files where written my changs from environment to environment. Maybe it must be increased
+		}, function (error) {
+			done(error); // 'uh oh: something bad happened’
+		});
+
 	});
 
 
@@ -334,25 +390,33 @@ describe('adapter-inbound-file: file events', function () {
 		// Stores the messages comming from the step
 		let messages = [];
 
-		collect({
+		const obj = collect({
+			"type": "kronos-adapter-inbound-file",
 			"name": "myfileInbound",
 			"onlyReadNewFiles": false, // Seems not to work in the test here.
 			"watchDir": volatileDir,
 			"regEx": "^gum_.*\\.csv"
 		}, messages);
 
-		// Wait 500 ms before creating the files
-		//	setTimeout(function () {}, 100);
+		let inboundFile = obj.inboundFile;
 
-		fs.createReadStream(path.join(fixturesDir, 'existing_file.csv')).pipe(fs.createWriteStream(path.join(volatileDir,
-			'existing_file_1.csv')));
-		fs.createReadStream(path.join(fixturesDir, 'existing_file.csv')).pipe(fs.createWriteStream(path.join(volatileDir,
-			'gum_file_2.csv')));
+		inboundFile.start().then(function (step) {
 
-		setTimeout(function () {
-			assert.deepEqual(messages, ['gum_file_2.csv']);
-			done();
-		}, 100); // The time needed until the files where written my changs from environment to environment. Maybe it must be increased
+			fs.createReadStream(path.join(fixturesDir, 'existing_file.csv')).pipe(fs.createWriteStream(path.join(
+				volatileDir,
+				'existing_file_1.csv')));
+			fs.createReadStream(path.join(fixturesDir, 'existing_file.csv')).pipe(fs.createWriteStream(path.join(
+				volatileDir,
+				'gum_file_2.csv')));
+
+			setTimeout(function () {
+				assert.deepEqual(messages, ['gum_file_2.csv']);
+				done();
+			}, 100); // The time needed until the files where written my changs from environment to environment. Maybe it must be increased
+		}, function (error) {
+			done(error); // 'uh oh: something bad happened’
+		});
+
 	});
 
 	it('Use an own function to filter the file names', function (done) {
@@ -362,7 +426,8 @@ describe('adapter-inbound-file: file events', function () {
 		// Stores the messages comming from the step
 		let messages = [];
 
-		collect({
+		const obj = collect({
+			"type": "kronos-adapter-inbound-file",
 			"name": "myfileInbound",
 			"onlyReadNewFiles": false, // Seems not to work in the test here.
 			"watchDir": volatileDir,
@@ -374,18 +439,25 @@ describe('adapter-inbound-file: file events', function () {
 			}
 		}, messages);
 
-		// Wait 500 ms before creating the files
-		//	setTimeout(function () {}, 100);
+		let inboundFile = obj.inboundFile;
 
-		fs.createReadStream(path.join(fixturesDir, 'existing_file.csv')).pipe(fs.createWriteStream(path.join(volatileDir,
-			'existing_file_1.csv')));
-		fs.createReadStream(path.join(fixturesDir, 'existing_file.csv')).pipe(fs.createWriteStream(path.join(volatileDir,
-			'gum_file_2.csv')));
+		inboundFile.start().then(function (step) {
 
-		setTimeout(function () {
-			assert.deepEqual(messages, ['existing_file_1.csv']);
-			done();
-		}, 100); // The time needed until the files where written my changs from environment to environment. Maybe it must be increased
+			fs.createReadStream(path.join(fixturesDir, 'existing_file.csv')).pipe(fs.createWriteStream(path.join(
+				volatileDir,
+				'existing_file_1.csv')));
+			fs.createReadStream(path.join(fixturesDir, 'existing_file.csv')).pipe(fs.createWriteStream(path.join(
+				volatileDir,
+				'gum_file_2.csv')));
+
+			setTimeout(function () {
+				assert.deepEqual(messages, ['existing_file_1.csv']);
+				done();
+			}, 100); // The time needed until the files where written my changs from environment to environment. Maybe it must be increased
+		}, function (error) {
+			done(error); // 'uh oh: something bad happened’
+		});
+
 	});
 
 });
@@ -393,7 +465,9 @@ describe('adapter-inbound-file: file events', function () {
 describe('adapter-inbound-file: config', function () {
 
 	it('only name given', function (done) {
-		let inboundFile = inboundFileFactory({}, {}, {
+
+		let inboundFile = manager.getStepInstance({
+			"type": "kronos-adapter-inbound-file",
 			"name": "myfileInbound"
 		});
 
@@ -404,7 +478,8 @@ describe('adapter-inbound-file: config', function () {
 	});
 
 	it('regEx given', function (done) {
-		let inboundFile = inboundFileFactory({}, {}, {
+		let inboundFile = manager.getStepInstance({
+			"type": "kronos-adapter-inbound-file",
 			"name": "myfileInbound",
 			"regEx": '.*\\.csv'
 		});
@@ -417,7 +492,8 @@ describe('adapter-inbound-file: config', function () {
 
 	it('ERROR: Filter is not a function', function (done) {
 		let fn = function () {
-			inboundFileFactory({}, {}, {
+			let inboundFile = manager.getStepInstance({
+				"type": "kronos-adapter-inbound-file",
 				"name": "myfileInbound",
 				"regEx": '.*\\.csv',
 				"filter": "a"
