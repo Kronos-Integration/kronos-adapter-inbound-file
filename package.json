@@ -1,5 +1,6 @@
 {
   "name": "kronos-adapter-inbound-file",
+  "version": "0.0.0",
   "description": "Listen on changes in a directory",
   "main": "index.js",
   "scripts": {
@@ -10,17 +11,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://git@github.com/Kronos-Integration/kronos-adapter-inbound-file.git"
+    "url": "git+https://github.com/Kronos-Integration/kronos-adapter-inbound-file.git"
   },
   "bugs": {
     "url": "https://github.com/Kronos-Integration/kronos-adapter-inbound-file/issues"
   },
   "homepage": "https://github.com/Kronos-Integration/kronos-adapter-inbound-file#readme",
-  "engines": {
-    "iojs": "2.0.0"
-  },
   "release": {
     "debug": false
+  },
+  "dependencies": {
+    "chokidar": "1.2.0",
+    "kronos-message": "^1.0.1",
+    "kronos-step": "2.6.0"
   },
   "devDependencies": {
     "chai": "3.4.1",
@@ -30,14 +33,18 @@
     "rimraf": "2.4.3",
     "semantic-release": "^4.3.5"
   },
-  "author": {
-    "name": "Torsten Link",
-    "email": "torstenlink@gmx.de"
-  },
+  "contributors": [
+    {
+      "name": "Torsten Link",
+      "email": "torstenlink@gmx.de"
+    },
+    {
+      "name": "Markus Felten",
+      "email": "markus.felten@gmx.de"
+    }
+  ],
   "license": "BSD-2-Clause",
-  "dependencies": {
-    "chokidar": "1.2.0",
-    "kronos-message": "^1.0.1",
-    "kronos-step": "2.6.0"
+  "engines": {
+    "node": ">=4.2.1"
   }
 }
