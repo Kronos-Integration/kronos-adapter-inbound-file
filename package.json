@@ -23,7 +23,7 @@
   "dependencies": {
     "chokidar": "1.4.1",
     "kronos-message": "^1.0.1",
-    "kronos-step": "2.11.0"
+    "kronos-step": "2.12.0"
   },
   "devDependencies": {
     "chai": "3.4.1",
