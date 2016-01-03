@@ -49,26 +49,24 @@ function collect(options, messages) {
 		errors.push(logObject.txt);
 	};
 
+
+	// This endpoint is the IN endpoint of the next step.
+	// It will be connected with the OUT endpoint of the Adpater
+	let receiveEndpoint = step.createEndpoint("testEndpointIn", {
+		"in": true
+	});
+
 	// This endpoint is the OUT endpoint of the previous step.
 	// It will be connected with the OUT endpoint of the Adpater
 	let sendEndpoint = step.createEndpoint("testEndpointOut", {
-		"out": true,
-		"active": true
+		"out": true
 	});
 
-	// This generator emulates the IN endpoint of the next step.
-	// It will be connected with the OUT endpoint of the adapter
-	let generatorFunction = function* () {
-		while (true) {
-			const message = yield;
-			// only push the file names
-			messages.push(message.header.file_name);
-		}
+	receiveEndpoint.receive = function (message) {
+		messages.push(message.header.file_name);
 	};
 
-	outEndPoint.connectedEndpoint = generatorFunction;
-	outEndPoint.outActiveIterator = generatorFunction();
-	outEndPoint.outActiveIterator.next();
+	outEndPoint.connect(receiveEndpoint);
 	inEndPoint.connect(sendEndpoint);
 
 	return {
