@@ -63,7 +63,7 @@ function collect(options, messages) {
 	});
 
 	receiveEndpoint.receive = function (message) {
-		messages.push(message.header.file_name);
+		messages.push(message.info.file_name);
 	};
 
 	outEndPoint.connect(receiveEndpoint);
@@ -95,7 +95,7 @@ describe('adapter-inbound-file: external events', function () {
 		let sendEndpoint = obj.ep;
 
 		let message = {
-			"header": {},
+			"info": {},
 			"hops": [],
 			"payload": {}
 		};
@@ -132,7 +132,7 @@ describe('adapter-inbound-file: external events', function () {
 		let sendEndpoint = obj.ep;
 
 		let message = {
-			"header": {},
+			"info": {},
 			"hops": [],
 			"payload": {}
 		};
@@ -168,7 +168,7 @@ describe('adapter-inbound-file: external events', function () {
 		let sendEndpoint = obj.ep;
 
 		let message = {
-			"header": {},
+			"info": {},
 			"hops": [],
 			"payload": {}
 		};
@@ -204,7 +204,7 @@ describe('adapter-inbound-file: external events', function () {
 		let sendEndpoint = obj.ep;
 
 		let message = {
-			"header": {},
+			"info": {},
 			"hops": [],
 			"payload": {
 				"directory": fixturesDir,
@@ -241,7 +241,7 @@ describe('adapter-inbound-file: external events', function () {
 		let sendEndpoint = obj.ep;
 
 		let message = {
-			"header": {},
+			"info": {},
 			"hops": [],
 			"payload": {
 				"directory": fixturesDir,
@@ -278,7 +278,7 @@ describe('adapter-inbound-file: external events', function () {
 		let sendEndpoint = obj.ep;
 
 		let message = {
-			"header": {},
+			"info": {},
 			"hops": [],
 			"payload": {
 				"files": ['existing_file.csv']
@@ -313,7 +313,7 @@ describe('adapter-inbound-file: external events', function () {
 		let sendEndpoint = obj.ep;
 
 		let message = {
-			"header": {},
+			"info": {},
 			"hops": []
 		};
 
