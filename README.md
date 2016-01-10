@@ -1,14 +1,14 @@
-[![npm](https://img.shields.io/npm/v/{{name}}.svg)](https://www.npmjs.com/package/{{name}})
-[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/Kronos-Integration/{{name}})
-[![Build Status](https://secure.travis-ci.org/Kronos-Integration/{{name}}.png)](http://travis-ci.org/Kronos-Integration/{{name}})
-[![bithound](https://www.bithound.io/github/Kronos-Integration/{{name}}/badges/score.svg)](https://www.bithound.io/github/Kronos-Integration/{{name}})
-[![Coverage Status](https://coveralls.io/repos/Kronos-Integration/{{name}}/badge.svg)](https://coveralls.io/r/Kronos-Integration/{{name}})
-[![Code Climate](https://codeclimate.com/github/Kronos-Integration/{{name}}/badges/gpa.svg)](https://codeclimate.com/github/Kronos-Integration/{{name}})
-[![GitHub Issues](https://img.shields.io/github/issues/Kronos-Integration/{{name}}.svg?style=flat-square)](https://github.com/Kronos-Integration/{{name}}/issues)
-[![Dependency Status](https://david-dm.org/Kronos-Integration/{{name}}.svg)](https://david-dm.org/Kronos-Integration/{{name}})
-[![devDependency Status](https://david-dm.org/Kronos-Integration/{{name}}/dev-status.svg)](https://david-dm.org/Kronos-Integration/{{name}}#info=devDependencies)
-[![docs](http://inch-ci.org/github/Kronos-Integration/{{name}}.svg?branch=master)](http://inch-ci.org/github/Kronos-Integration/{{name}})
-[![downloads](http://img.shields.io/npm/dm/{{name}}.svg?style=flat-square)](https://npmjs.org/package/{{name}})
+[![npm](https://img.shields.io/npm/v/kronos-adapter-inbound-file.svg)](https://www.npmjs.com/package/kronos-adapter-inbound-file)
+[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/Kronos-Integration/kronos-adapter-inbound-file)
+[![Build Status](https://secure.travis-ci.org/Kronos-Integration/kronos-adapter-inbound-file.png)](http://travis-ci.org/Kronos-Integration/kronos-adapter-inbound-file)
+[![bithound](https://www.bithound.io/github/Kronos-Integration/kronos-adapter-inbound-file/badges/score.svg)](https://www.bithound.io/github/Kronos-Integration/kronos-adapter-inbound-file)
+[![Coverage Status](https://coveralls.io/repos/Kronos-Integration/kronos-adapter-inbound-file/badge.svg)](https://coveralls.io/r/Kronos-Integration/kronos-adapter-inbound-file)
+[![Code Climate](https://codeclimate.com/github/Kronos-Integration/kronos-adapter-inbound-file/badges/gpa.svg)](https://codeclimate.com/github/Kronos-Integration/kronos-adapter-inbound-file)
+[![GitHub Issues](https://img.shields.io/github/issues/Kronos-Integration/kronos-adapter-inbound-file.svg?style=flat-square)](https://github.com/Kronos-Integration/kronos-adapter-inbound-file/issues)
+[![Dependency Status](https://david-dm.org/Kronos-Integration/kronos-adapter-inbound-file.svg)](https://david-dm.org/Kronos-Integration/kronos-adapter-inbound-file)
+[![devDependency Status](https://david-dm.org/Kronos-Integration/kronos-adapter-inbound-file/dev-status.svg)](https://david-dm.org/Kronos-Integration/kronos-adapter-inbound-file#info=devDependencies)
+[![docs](http://inch-ci.org/github/Kronos-Integration/kronos-adapter-inbound-file.svg?branch=master)](http://inch-ci.org/github/Kronos-Integration/kronos-adapter-inbound-file)
+[![downloads](http://img.shields.io/npm/dm/kronos-adapter-inbound-file.svg?style=flat-square)](https://npmjs.org/package/kronos-adapter-inbound-file)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
 install
@@ -17,7 +17,7 @@ install
 With [npm](http://npmjs.org) do:
 
 ```shell
-npm install {{name}}
+npm install kronos-adapter-inbound-file
 ```
 
 license
