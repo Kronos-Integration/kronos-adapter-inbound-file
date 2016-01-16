@@ -52,22 +52,19 @@ function collect(options, messages) {
 
 	// This endpoint is the IN endpoint of the next step.
 	// It will be connected with the OUT endpoint of the Adpater
-	let receiveEndpoint = step.createEndpoint("testEndpointIn", {
-		"in": true
-	});
+	let receiveEndpoint = new step.endpoint.ReceiveEndpoint("testEndpointIn");
 
 	// This endpoint is the OUT endpoint of the previous step.
 	// It will be connected with the OUT endpoint of the Adpater
-	let sendEndpoint = step.createEndpoint("testEndpointOut", {
-		"out": true
-	});
+	let sendEndpoint = new step.endpoint.SendEndpoint("testEndpointOut");
 
 	receiveEndpoint.receive = function (message) {
 		messages.push(message.info.file_name);
+		return Promise.resolve();
 	};
 
-	outEndPoint.connect(receiveEndpoint);
-	inEndPoint.connect(sendEndpoint);
+	outEndPoint.connected = receiveEndpoint;
+	sendEndpoint.connected = inEndPoint;
 
 	return {
 		"ep": sendEndpoint,
@@ -102,7 +99,7 @@ describe('adapter-inbound-file: external events', function () {
 		message.payload = path.join(fixturesDir, 'existing_file.csv');
 
 		inboundFile.start().then(function (step) {
-			sendEndpoint.send(message);
+			sendEndpoint.receive(message);
 			setTimeout(function () {
 				assert.deepEqual(messages, ['existing_file.csv']);
 				done();
@@ -139,7 +136,7 @@ describe('adapter-inbound-file: external events', function () {
 		message.payload = path.join(fixturesDir, 'gumbo.csv');
 
 		inboundFile.start().then(function (step) {
-			sendEndpoint.send(message);
+			sendEndpoint.receive(message);
 			setTimeout(function () {
 				assert.deepEqual(messages, []);
 				done();
@@ -175,7 +172,7 @@ describe('adapter-inbound-file: external events', function () {
 		message.payload = [path.join(fixturesDir, 'gumbo.csv'), path.join(fixturesDir, 'existing_file.csv')];
 
 		inboundFile.start().then(function (step) {
-			sendEndpoint.send(message);
+			sendEndpoint.receive(message);
 			setTimeout(function () {
 				assert.deepEqual(messages, ['existing_file.csv']);
 				done();
@@ -213,7 +210,7 @@ describe('adapter-inbound-file: external events', function () {
 		};
 
 		inboundFile.start().then(function (step) {
-			sendEndpoint.send(message);
+			sendEndpoint.receive(message);
 			setTimeout(function () {
 				assert.deepEqual(messages, ['existing_file.csv']);
 				done();
@@ -250,7 +247,7 @@ describe('adapter-inbound-file: external events', function () {
 		};
 
 		inboundFile.start().then(function (step) {
-			sendEndpoint.send(message);
+			sendEndpoint.receive(message);
 			setTimeout(function () {
 				assert.deepEqual(messages, ['existing_file.csv']);
 				done();
@@ -286,7 +283,7 @@ describe('adapter-inbound-file: external events', function () {
 		};
 
 		inboundFile.start().then(function (step) {
-			sendEndpoint.send(message);
+			sendEndpoint.receive(message);
 			setTimeout(function () {
 				assert.deepEqual(messages, []);
 				done();
@@ -318,7 +315,7 @@ describe('adapter-inbound-file: external events', function () {
 		};
 
 		inboundFile.start().then(function (step) {
-			sendEndpoint.send(message);
+			sendEndpoint.receive(message);
 			setTimeout(function () {
 				assert.deepEqual(messages, []);
 				done();
