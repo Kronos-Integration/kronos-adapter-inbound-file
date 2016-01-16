@@ -27,10 +27,10 @@
   "devDependencies": {
     "chai": "3.4.1",
     "istanbul": "^0.4.2",
-    "kronos-test-step": "^2.8.0",
+    "kronos-test-step": "2.9.1",
     "mocha": "2.3.4",
     "rimraf": "2.5.0",
-    "semantic-release": "^4.3.5"
+    "semantic-release": "6.1.0"
   },
   "contributors": [
     {
