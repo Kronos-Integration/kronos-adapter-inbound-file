@@ -1,7 +1,7 @@
 {
   "name": "kronos-adapter-inbound-file",
   "version": "0.0.0",
-  "description": "Listen on changes in a directory",
+  "description": "Listen for changes in a directory",
   "main": "index.js",
   "keywords": [
     "kronos-step"
@@ -22,12 +22,14 @@
   "homepage": "https://github.com/Kronos-Integration/kronos-adapter-inbound-file#readme",
   "dependencies": {
     "chokidar": "1.4.2",
-    "kronos-step": "^3.9.0"
+    "kronos-step": "^4.0.1"
   },
   "devDependencies": {
     "chai": "3.5.0",
     "istanbul": "^0.4.2",
-    "kronos-test-step": "2.9.1",
+    "kronos-service-manager": "^3.2.0",
+    "kronos-test-step": "3.0.1",
+    "merge-light": "0.0.2",
     "mocha": "2.4.5",
     "rimraf": "2.5.1",
     "semantic-release": "6.1.0"
