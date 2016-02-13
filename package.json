@@ -31,7 +31,7 @@
     "kronos-test-step": "3.0.1",
     "merge-light": "0.0.2",
     "mocha": "2.4.5",
-    "rimraf": "2.5.1",
+    "rimraf": "2.5.2",
     "semantic-release": "6.2.0",
     "jsdoc": "3.4.0"
   },
