@@ -22,7 +22,7 @@
   "homepage": "https://github.com/Kronos-Integration/kronos-adapter-inbound-file#readme",
   "dependencies": {
     "chokidar": "1.4.2",
-    "kronos-step": "^4.0.1"
+    "kronos-step": "^4.0.5"
   },
   "devDependencies": {
     "chai": "3.5.0",
