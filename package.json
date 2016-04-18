@@ -29,7 +29,7 @@
     "chai": "3.5.0",
     "istanbul": "0.4.3",
     "jsdoc": "3.4.0",
-    "kronos-service-manager": "3.3.1",
+    "kronos-service-manager": "3.3.2",
     "kronos-test-step": "3.1.0",
     "merge-light": "0.0.2",
     "mocha": "2.4.5",
