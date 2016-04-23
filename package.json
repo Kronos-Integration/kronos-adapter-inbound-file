@@ -22,14 +22,14 @@
   "homepage": "https://github.com/Kronos-Integration/kronos-adapter-inbound-file#readme",
   "dependencies": {
     "chokidar": "1.4.3",
-    "kronos-endpoint": "^2.8.1",
-    "kronos-step": "5.2.1"
+    "kronos-endpoint": "^2.9.1",
+    "kronos-step": "^5.2.2"
   },
   "devDependencies": {
     "chai": "3.5.0",
     "istanbul": "0.4.3",
     "jsdoc": "3.4.0",
-    "kronos-service-manager": "3.3.5",
+    "kronos-service-manager": "^3.3.6",
     "kronos-test-step": "^3.1.1",
     "merge-light": "0.0.2",
     "mocha": "2.4.5",
