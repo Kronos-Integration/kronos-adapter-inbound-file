@@ -34,7 +34,7 @@
     "merge-light": "0.0.2",
     "mocha": "2.4.5",
     "rimraf": "2.5.2",
-    "semantic-release": "6.2.1",
+    "semantic-release": "6.2.2",
     "cz-conventional-changelog": "1.1.6"
   },
   "contributors": [
