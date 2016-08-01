@@ -33,7 +33,7 @@
     "kronos-service-manager": "^3.4.10",
     "kronos-test-step": "^3.1.4",
     "merge-light": "0.0.2",
-    "mocha": "2.5.3",
+    "mocha": "3.0.0",
     "rimraf": "2.5.4",
     "semantic-release": "6.3.0"
   },
