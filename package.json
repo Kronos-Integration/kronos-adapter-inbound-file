@@ -23,7 +23,7 @@
   "dependencies": {
     "chokidar": "1.6.1",
     "kronos-endpoint": "^2.14.3",
-    "kronos-step": "^5.3.7"
+    "kronos-step": "^5.3.8"
   },
   "devDependencies": {
     "chai": "3.5.0",
