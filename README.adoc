@@ -1,4 +1,6 @@
 include::./doc/index.adoc[]
 
 === License
+
+image:https://badges.greenkeeper.io/Kronos-Integration/kronos-adapter-inbound-file.svg[link="https://greenkeeper.io/"]
 BSD-2-Clause
