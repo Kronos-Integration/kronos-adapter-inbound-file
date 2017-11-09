@@ -10,7 +10,7 @@
     "cover": "./node_modules/istanbul/lib/cli.js cover --hook-run-in-context ./node_modules/mocha/bin/_mocha -- --R spec --U exports tests/*_test.js",
     "doc": "./node_modules/.bin/jsdoc lib/*.js",
     "test": "./node_modules/.bin/mocha tests/*_test.js",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
+    "semantic-release": "semantic-release"
   },
   "repository": {
     "type": "git",
@@ -35,7 +35,7 @@
     "merge-light": "0.0.2",
     "mocha": "^3.5.3",
     "rimraf": "2.6.2",
-    "semantic-release": "^8.0.4"
+    "semantic-release": "^9.1.0"
   },
   "contributors": [
     {
@@ -49,7 +49,7 @@
   ],
   "license": "BSD-2-Clause",
   "engines": {
-    "node": ">=8.6.0"
+    "node": ">=8.9.1"
   },
   "xo": {
     "space": true
