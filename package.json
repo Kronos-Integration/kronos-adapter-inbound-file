@@ -37,7 +37,7 @@
     "merge-light": "0.0.2",
     "mocha": "^4.0.1",
     "rimraf": "2.6.2",
-    "semantic-release": "^10.0.1"
+    "semantic-release": "^11.0.2"
   },
   "contributors": [
     {
