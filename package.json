@@ -1,25 +1,28 @@
 {
   "name": "kronos-adapter-inbound-file",
   "version": "0.0.0-semantic-release",
-  "description": "Listen for changes in a directory",
   "main": "index.js",
+  "description": "Listen for changes in a directory",
   "keywords": [
     "kronos-step"
   ],
+  "contributors": [
+    {
+      "name": "Torsten Link",
+      "email": "torstenlink@gmx.de"
+    },
+    {
+      "name": "Markus Felten",
+      "email": "markus.felten@gmx.de"
+    }
+  ],
+  "license": "BSD-2-Clause",
   "scripts": {
     "cover": "./node_modules/istanbul/lib/cli.js cover --hook-run-in-context ./node_modules/mocha/bin/_mocha -- --R spec --U exports tests/*_test.js",
     "doc": "./node_modules/.bin/jsdoc lib/*.js",
     "test": "./node_modules/.bin/mocha tests/*_test.js",
     "semantic-release": "semantic-release"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Kronos-Integration/kronos-adapter-inbound-file.git"
-  },
-  "bugs": {
-    "url": "https://github.com/Kronos-Integration/kronos-adapter-inbound-file/issues"
-  },
-  "homepage": "https://github.com/Kronos-Integration/kronos-adapter-inbound-file#readme",
   "dependencies": {
     "chokidar": "1.7.0",
     "kronos-step": "^5.5.2",
@@ -37,20 +40,17 @@
     "rimraf": "2.6.2",
     "semantic-release": "^11.1.0"
   },
-  "contributors": [
-    {
-      "name": "Torsten Link",
-      "email": "torstenlink@gmx.de"
-    },
-    {
-      "name": "Markus Felten",
-      "email": "markus.felten@gmx.de"
-    }
-  ],
-  "license": "BSD-2-Clause",
   "engines": {
     "node": ">=8.9.3"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kronos-Integration/kronos-adapter-inbound-file.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Kronos-Integration/kronos-adapter-inbound-file/issues"
+  },
+  "homepage": "https://github.com/Kronos-Integration/kronos-adapter-inbound-file#readme",
   "xo": {
     "space": true
   },
