@@ -24,7 +24,7 @@
     "semantic-release": "semantic-release"
   },
   "dependencies": {
-    "chokidar": "1.7.0",
+    "chokidar": "2.0.0",
     "kronos-step": "^5.5.2",
     "kronos-endpoint": "^2.14.14"
   },
