@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "chokidar": "2.0.0",
-    "kronos-step": "^5.5.2",
+    "kronos-step": "^5.6.5",
     "kronos-endpoint": "^2.14.14"
   },
   "devDependencies": {
