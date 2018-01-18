@@ -38,10 +38,10 @@
     "merge-light": "0.0.2",
     "mocha": "^3.5.3",
     "rimraf": "2.6.2",
-    "semantic-release": "^11.1.0"
+    "semantic-release": "^12.2.3"
   },
   "engines": {
-    "node": ">=8.9.3"
+    "node": ">=8.9.4"
   },
   "repository": {
     "type": "git",
