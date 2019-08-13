@@ -38,7 +38,7 @@
     "merge-light": "0.0.2",
     "mocha": "^6.2.0",
     "rimraf": "2.6.2",
-    "semantic-release": "^15.13.19"
+    "semantic-release": "^15.13.21"
   },
   "engines": {
     "node": ">=10.10"
