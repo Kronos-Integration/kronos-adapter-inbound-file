@@ -32,7 +32,7 @@
     "chai": "^4.2.0",
     "cz-conventional-changelog": "2.1.0",
     "istanbul": "0.4.5",
-    "jsdoc": "3.5.5",
+    "jsdoc": "3.6.11",
     "kronos-service-manager": "^3.5.10",
     "kronos-test-step": "^3.1.4",
     "merge-light": "0.0.2",
