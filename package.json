@@ -24,7 +24,7 @@
     "test": "./node_modules/.bin/mocha tests/*_test.js"
   },
   "dependencies": {
-    "chokidar": "2.0.3",
+    "chokidar": "3.5.3",
     "kronos-endpoint": "^2.15.0",
     "kronos-step": "^5.7.0"
   },
